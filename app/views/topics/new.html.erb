@@ -11,7 +11,7 @@
 
 <%= error_messages_for :topic %>
 
-<% form_for :topic, :url  => forum_topics_path(@forum) do |f| -%>
+<%= form_for :topic, :url  => forum_topics_path(@forum) do |f| -%>
 
 <%= render :partial => "form", :object => f %>
       <%unless logged_in?%>
@@ -24,7 +24,7 @@
              </div>
 
              <div id="cadastroQBox">
-              <% fields_for :user do |f| %>
+              <%= fields_for :user do |f| %>
                   <%= render :partial => "users/form_new",:locals=>{:f=>f} %>
               <% end %>
         <br class="clear" />

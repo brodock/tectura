@@ -30,7 +30,7 @@ class User
   
   def self.authenticate(login, password)
     return nil if login.blank? || password.blank?
-    u = User.find(:first, :conditions => ["login = ? or email = ? and state in ('active', 'pending')", login, login])
+    u = User.where(["login = ? or email = ? and state in ('active', 'pending')", login, login])
     u && u.authenticated?(password) ? u : nil
   end
 
@@ -38,7 +38,7 @@ class User
     self.deleted_at = nil
     self.activation_code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
     
-    UserMailer.deliver_signup_notification(self) unless using_openid
+    UserMailer.signup_notification(self).deliver unless using_openid
   end
 
 protected
@@ -52,7 +52,7 @@ protected
     self.deleted_at = nil
     self.activation_code = ""
     
-    UserMailer.deliver_activation(self) unless using_openid
+    UserMailer.activation(self).deliver unless using_openid
   end
   
   def remove_moderatorships

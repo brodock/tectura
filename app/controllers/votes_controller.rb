@@ -11,7 +11,7 @@ class VotesController < ApplicationController
   end
 
   def vote(post_id, value)
-    existing_vote = Vote.find(:first, :conditions => { :user_id => current_user.id, :post_id => post_id })
+    existing_vote = Vote.first.where({ :user_id => current_user.id, :post_id => post_id })
     post = Post.find(post_id)
     topic = Topic.find(post.topic_id)
     if existing_vote && existing_vote.value == value

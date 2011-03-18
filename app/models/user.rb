@@ -28,12 +28,12 @@ class User < ActiveRecord::Base
   attr_readonly :posts_count, :last_seen_at
   attr_accessible :city
 
-  named_scope :named_like, lambda {|name|
+  scope :named_like, lambda {|name|
     { :conditions => ["users.display_name like ? or users.login like ?",
       "#{name}%", "#{name}%"] }}
 
   def self.prefetch_from(records)
-    find(:all, :select => 'distinct *', :conditions => ['id in (?)', records.collect(&:user_id).uniq])
+    User.select('distinct *').where(['id in (?)', records.collect(&:user_id).uniq])
   end
 
   def self.index_from(records)
@@ -109,6 +109,6 @@ class User < ActiveRecord::Base
   end
 
   def self.recent_and_silent(date)
-    User.find(:all, :conditions => ['created_at >= ? and posts_count <= ?', date, 2])
+    User.where(['created_at >= ? and posts_count <= ?', date, 2])
   end
 end

@@ -1,51 +1,47 @@
-ActionController::Routing::Routes.draw do |map|
-  map.open_id_complete '/session',
-    :controller => "sessions", :action => "create",
-    :requirements => { :method => :get }
-
-  map.resources :sites, :moderatorships
-
-  map.resources :monitorships
-
-  map.resources :topics do |topic|
-    topic.resources :posts
+Tectura::Application.routes.draw do
+  match '/session' => 'sessions#create', :as => :open_id_complete, :constraints => { :method => get }
+  resources :sites
+  resources :moderatorships
+  resources :monitorships
+  resources :topics do
+  
+  
+      resources :posts
   end
 
-  map.resources :posts
-  map.resources :users, :member => { :suspend   => :put,
-                                     :settings  => :get,
-                                     :make_admin => :put,
-                                     :unsuspend => :put,
-                                     :purge     => :delete },
-                        :has_many => [:posts]
-
-  map.upvote 'posts/:id/upvote', :controller => "votes", :action => "upvote"
-  map.downvote 'posts/:id/downvote', :controller => "votes", :action => "downvote"
-
-  map.activate '/activate/:activation_code',       :controller => 'users',    :action => 'activate', :activation_code => nil
-  map.signup   '/signup',                          :controller => 'users',    :action => 'new'
-  map.state   '/state',                            :controller => 'users',    :action => 'update_state'
-  map.login    '/login',                           :controller => 'sessions', :action => 'new'
-  map.logout   '/logout',                          :controller => 'sessions', :action => 'destroy'
-  map.resend_confirmation_mail '/resend_confirmation_mail', :controller => 'users', :action => 'resend_confirmation_mail'
-  map.lost_password '/lost_password',               :controller => 'users',    :action => 'remember_password'
-  map.reset_password_confirmation '/reset_password',            :controller => 'users',    :action => 'reset_password_confirmation', :conditions => { :method => :post }
-  map.reset_password '/reset_password/:secret',    :controller => 'users',    :action => 'reset_password', :conditions => { :method => :get }
-  map.settings '/settings',                        :controller => 'users',    :action => 'settings'
-  map.resource  :session                           
-  map.about     '/about',                          :controller => 'about',    :action => 'show'
-  map.bug_report '/bug_report',                    :controller => 'about',    :action => 'bug_report'
-                                                   
-  map.tag       '/tag/:tag_name',                  :controller => 'tags',     :action => 'search'
-  map.search    '/search',                         :controller => 'search',   :action => 'show'
-
-  map.with_options :controller => 'posts', :action => 'monitored' do |map|
-    map.formatted_monitored_posts 'users/:user_id/monitored.:format'
-    map.monitored_posts           'users/:user_id/monitored'
+  resources :posts
+  resources :users do
+  
+    member do
+  put :make_admin
+  get :settings
+  put :unsuspend
+  delete :purge
+  put :suspend
+  end
+  
   end
 
-  map.show_all "forums/all", :controller => "forums", :action => "show_all"
-  map.hide_downvoted "forums/voted", :controller => "forums", :action => "hide_downvoted"
-
-  map.root :controller => :forums, :action => :show, :id => "arquitetura"
+  match 'posts/:id/upvote' => 'votes#upvote', :as => :upvote
+  match 'posts/:id/downvote' => 'votes#downvote', :as => :downvote
+  match '/activate/:activation_code' => 'users#activate', :as => :activate, :activation_code => 
+  match '/signup' => 'users#new', :as => :signup
+  match '/state' => 'users#update_state', :as => :state
+  match '/login' => 'sessions#new', :as => :login
+  match '/logout' => 'sessions#destroy', :as => :logout
+  match '/resend_confirmation_mail' => 'users#resend_confirmation_mail', :as => :resend_confirmation_mail
+  match '/lost_password' => 'users#remember_password', :as => :lost_password
+  match '/reset_password' => 'users#reset_password_confirmation', :as => :reset_password_confirmation, :via => post
+  match '/reset_password/:secret' => 'users#reset_password', :as => :reset_password, :via => get
+  match '/settings' => 'users#settings', :as => :settings
+  resource :session
+  match '/about' => 'about#show', :as => :about
+  match '/bug_report' => 'about#bug_report', :as => :bug_report
+  match '/tag/:tag_name' => 'tags#search', :as => :tag
+  match '/search' => 'search#show', :as => :search
+  match 'users/:user_id/monitored.:format' => 'posts#monitored', :as => :formatted_monitored_posts
+  match 'users/:user_id/monitored' => 'posts#monitored', :as => :monitored_posts
+  match 'forums/all' => 'forums#show_all', :as => :show_all
+  match 'forums/voted' => 'forums#hide_downvoted', :as => :hide_downvoted
+  match '/' => 'forums#show', :id => 'arquitetura'
 end

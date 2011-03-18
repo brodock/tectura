@@ -51,7 +51,7 @@ class UsersController < ApplicationController
 
   def activate
     # not sure why this was using a symbol. Let's use the real false.
-    self.current_user = params[:activation_code].blank? ? false : current_site.all_users.find_in_state(:first, :pending, :conditions => {:activation_code => params[:activation_code]})
+    self.current_user = params[:activation_code].blank? ? false : current_site.all_users.first.where(:state => :pending, :activation_code => params[:activation_code])
     if logged_in?
       current_user.activate!
       flash[:notice] = I18n.t 'txt.signup_complete', :default => "Signup complete!"
@@ -105,7 +105,7 @@ class UsersController < ApplicationController
     else
       user.generate_lost_password_secret
       user.save
-      UserMailer.deliver_remember_password(user)
+      UserMailer.remember_password(user).deliver
       flash[:notice] = I18n.t('txt.verify_your_email', :default => 'Verify your mail in order to reset your password')
       redirect_to root_url
     end
@@ -129,7 +129,7 @@ class UsersController < ApplicationController
   end
   
   def resend_confirmation_mail
-    UserMailer.deliver_signup_notification current_user
+    UserMailer.signup_notification(current_user).deliver
     flash[:notice] = I18n.t("txt.mail_sent", :default => "Mail sent")
     redirect_to root_path
   end

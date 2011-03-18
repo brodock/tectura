@@ -12,7 +12,7 @@
 
 
 <% if logged_in? -%>
-    <% form_tag monitorship_path(@topic), :id => 'postMonitor' do -%>
+    <%= form_tag monitorship_path(@topic), :id => 'postMonitor' do -%>
         <div>
             <input id="monitor_checkbox" name="enable_monitor" type="checkbox" <%= "checked='checked'" if monitoring? %> />
             <label id="monitor_label" for="monitor_checkbox">
@@ -132,7 +132,7 @@
     </p>
 <% elsif can_comment? -%>
     <%= content_tag 'p', h(flash[:bad_reply]), :class => 'notice' if flash[:bad_reply] %>
-    <% form_for :post, :url => forum_topic_posts_path(@forum, @topic, :page => @topic.last_page) do |f| -%>
+    <%= form_for :post, :url => forum_topic_posts_path(@forum, @topic, :page => @topic.last_page) do |f| -%>
         <div id="newTreadForm">
             <p><%= f.text_area :body, :rows => 8 %></p>
             <input name="extra" id="extra" value="" type="hidden" />
@@ -152,7 +152,7 @@
                 </div>
 
                 <div id="cadastroQBox">
-                    <% fields_for :user do |f| %>
+                    <%= fields_for :user do |f| %>
                     <%= render :partial => "users/form_new",:locals=>{:f=>f} %>
                     <% end %>
                     <br class="clear" />

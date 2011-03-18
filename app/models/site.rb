@@ -18,7 +18,7 @@ class Site < ActiveRecord::Base
   end
   
   def self.main
-    @main ||= find :first, :conditions => {:host => ''}
+    @main ||= Site.first.where({:host => ''})
   end
   
   def self.find_by_host(name)
@@ -26,7 +26,7 @@ class Site < ActiveRecord::Base
     name.downcase!
     name.strip!
     name.sub! /^www\./, ''
-    sites = find :all, :conditions => ['host = ? or host = ?', name, '']
+    sites = Site.where(['host = ? or host = ?', name, ''])
     sites.reject { |s| s.default? }.first || sites.first
   end
   

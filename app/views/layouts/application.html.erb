@@ -6,7 +6,7 @@
   <meta content="pt-br" http-equiv="Content-Language">
 <%= yield :head_content %>
   <title><%= yield :page_title %></title>
-  <%= stylesheet_link_tag "display", "captcha", "coderay", :concat => (RAILS_ENV == 'production') %>
+  <%= stylesheet_link_tag "display", "captcha", "coderay", :concat => (Rails.env == 'production') %>
   <% unless @feed_icons.blank? -%>
     <% @feed_icons.each do |feed| -%>
       <%= auto_discovery_link_tag :atom, feed[:url], :title => "Assine o #{feed[:title]}" %>

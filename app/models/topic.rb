@@ -3,7 +3,7 @@ class Topic < ActiveRecord::Base
 
   acts_as_taggable
 
-  before_validation_on_create :set_default_attributes
+  before_validation(:on => :create) { set_default_attributes }
   validates_presence_of :title
 
   after_create   :after_create_handler
@@ -93,14 +93,14 @@ class Topic < ActiveRecord::Base
     topics = Topic.top_hottest_since(start_date)
     shy_users = User.recent_and_silent(start_date)
     
-    UserMailer.deliver_hottest_topics("guilherme.silveira@caelum.com.br",
+    UserMailer.hottest_topics("guilherme.silveira@caelum.com.br",
                                       topics,
                                       destinations,
-                                      shy_users)
+                                      shy_users).deliver
   end
   
   def self.top_hottest_since(date, max = 10)
-    views = View.find(:all, :select => 'topic_id, count(topic_id) as count', :group => 'topic_id', :conditions => ['created_at >= ?', date], :order => 'count DESC', :limit => max)
+    views = View.select('topic_id, count(topic_id) as count').where(['created_at >= ?', date]).group('topic_id').order('count DESC').limit(max)
     ids = views.map{|topic| topic.topic_id}
     Topic.find(ids)
   end
