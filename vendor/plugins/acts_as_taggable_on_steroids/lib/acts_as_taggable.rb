@@ -15,26 +15,10 @@ module ActiveRecord #:nodoc:
           after_create :save_tags
           after_update :save_tags
           
-
           include ActiveRecord::Acts::Taggable::InstanceMethods
           extend ActiveRecord::Acts::Taggable::SingletonMethods
           
           alias_method_chain :reload, :tag_list
-          
-          
-          acts_as_taggable_on_steroids_attributes = self.instance_method(:attributes)
-          define_method(:attributes) do
-            result = acts_as_taggable_on_steroids_attributes.bind(self).call
-            result.merge('tags' => tag_list.join("#{TagList.delimiter} ").gsub("  "," "))
-          end
-          acts_as_taggable_on_steroids_attributes_eql = self.instance_method(:attributes=)
-          define_method(:attributes=) do |new_attr|
-            n_tags = new_attr.delete(:tags)
-            acts_as_taggable_on_steroids_attributes_eql.bind(self).call(new_attr)
-            self.class.instance_method(:tag_list=).bind(self).call(n_tags)
-            new_attr[:tags] = n_tags
-            new_attr
-          end          
         end
         
         def cached_tag_list_column_name
@@ -163,8 +147,8 @@ module ActiveRecord #:nodoc:
           conditions = conditions.join(" AND ")
           
           joins = ["INNER JOIN #{table_name} ON #{table_name}.#{primary_key} = #{Tagging.table_name}.taggable_id"]
-          joins << options.delete(:joins) if options[:joins]
-          joins << scope[:joins] if scope && scope[:joins]
+          joins << options.delete(:joins) if options[:joins].present?
+          joins << scope[:joins] if scope && scope[:joins].present?
           joins = joins.join(" ")
           
           options = { :conditions => conditions, :joins => joins }.update(options)
@@ -197,7 +181,7 @@ module ActiveRecord #:nodoc:
         def tag_list=(value)
           @tag_list = TagList.from(value)
         end
-                
+        
         def save_cached_tag_list
           if self.class.caching_tag_list?
             self[self.class.cached_tag_list_column_name] = tag_list.to_s
