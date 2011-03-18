@@ -1,11 +1,8 @@
 *~
 .DS_Store
 app/stylesheets/*.css
-tmp
-log/production.log
-log/development.log
-log/test.log
-log/delayed_job.log
+tmp/
+log/*.log
 config/database.yml
 config/email.yml
 vendor/rails
@@ -24,3 +21,4 @@ temporary
 .buildpath
 .settings
 recaptcha.rb
+.bundle

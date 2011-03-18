@@ -1,26 +1,34 @@
 source "http://rubygems.org"
 
-gem 'rails', '2.3.11'
-gem 'will_paginate'
-gem 'bluecloth'
+gem 'rails', '3.0.5'
+gem 'ruby-openid', '~> 2.0.4', :require => "openid"
+gem 'rack-openid'
+
 gem 'less'
-gem 'coderay'
 gem 'exception_notification'
 gem 'delayed_job'
+
+gem 'acts_as_list'
+gem 'acts_as_state_machine'
+gem 'permalink_fu'
+
+gem 'will_paginate'
 gem 'ruby-recaptcha'
-gem 'ruby-openid', '~> 2.0.4'
+gem 'bluecloth'
 gem 'RedCloth', :require => "redcloth"
+gem 'coderay'
 
 gem 'mail'
-gem 'mysql'
+gem 'mysql2'
 
-group :development, :test do
-  gem 'rspec', '1.2.4'
-  gem 'rspec-rails', '1.2.4'
+group :development do
   gem 'highline'
   gem 'ruby-debug'
 end
 
 group :test do
-  gem 'sqlite3'
+  gem 'rspec-rails'
+  gem 'autotest'
+  gem 'rails3-generators'
+  gem 'sqlite3-ruby', :require => "sqlite3"
 end

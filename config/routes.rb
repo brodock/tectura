@@ -1,38 +1,31 @@
 Tectura::Application.routes.draw do
-  match '/session' => 'sessions#create', :as => :open_id_complete, :constraints => { :method => get }
-  resources :sites
-  resources :moderatorships
-  resources :monitorships
+  get '/session' => 'sessions#create', :as => :open_id_complete
+  
+  resources :sites, :moderatorships, :monitorships
   resources :topics do
-  
-  
       resources :posts
   end
 
   resources :posts
   resources :users do
-  
     member do
-  put :make_admin
-  get :settings
-  put :unsuspend
-  delete :purge
-  put :suspend
-  end
-  
+      put :make_admin, :suspend, :unsuspend
+      get :settings
+      delete :purge
+    end 
   end
 
   match 'posts/:id/upvote' => 'votes#upvote', :as => :upvote
   match 'posts/:id/downvote' => 'votes#downvote', :as => :downvote
-  match '/activate/:activation_code' => 'users#activate', :as => :activate, :activation_code => 
+  match '/activate/:activation_code' => 'users#activate', :activation_code => nil, :as => :activate
   match '/signup' => 'users#new', :as => :signup
   match '/state' => 'users#update_state', :as => :state
   match '/login' => 'sessions#new', :as => :login
   match '/logout' => 'sessions#destroy', :as => :logout
   match '/resend_confirmation_mail' => 'users#resend_confirmation_mail', :as => :resend_confirmation_mail
   match '/lost_password' => 'users#remember_password', :as => :lost_password
-  match '/reset_password' => 'users#reset_password_confirmation', :as => :reset_password_confirmation, :via => post
-  match '/reset_password/:secret' => 'users#reset_password', :as => :reset_password, :via => get
+  post '/reset_password' => 'users#reset_password_confirmation', :as => :reset_password_confirmation
+  get '/reset_password/:secret' => 'users#reset_password', :as => :reset_password
   match '/settings' => 'users#settings', :as => :settings
   resource :session
   match '/about' => 'about#show', :as => :about

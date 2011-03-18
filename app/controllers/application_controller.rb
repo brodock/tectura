@@ -5,7 +5,6 @@ class ApplicationController < ActionController::Base
   include AuthenticatedSystem
   include PathHelper
   include MonitorshipsHelper
-  include ExceptionNotification::Notifiable
   include ReCaptcha::AppHelper
 
   helper :all
@@ -15,9 +14,6 @@ class ApplicationController < ActionController::Base
   # See ActionController::RequestForgeryProtection for details
   # Uncomment the :secret if you're not using the cookie session store
   protect_from_forgery # :secret => 'e125a4be589f9d81263920581f6e4182'
-
-  # Filter password parameter from logs
-  filter_parameter_logging :password, :password_confirmation
 
   # raised in #current_site
   rescue_from Site::UndefinedError do |e|
