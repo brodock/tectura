@@ -18,7 +18,8 @@ class ForumsController < ApplicationController
   # GET /forums/1
   # GET /forums/1.xml
   def show
-    @forum = Forum.find_by_permalink(params[:id])
+    
+    @forum = Forum.find_by_permalink!(params[:id] || 'arquitetura')
     (session[:forums] ||= {})[@forum.id] = Time.now.utc
     (session[:forums_page] ||= Hash.new(1))[@forum.id] = current_page if current_page > 1
 

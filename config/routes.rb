@@ -36,5 +36,6 @@ Tectura::Application.routes.draw do
   match 'users/:user_id/monitored' => 'posts#monitored', :as => :monitored_posts
   match 'forums/all' => 'forums#show_all', :as => :show_all
   match 'forums/voted' => 'forums#hide_downvoted', :as => :hide_downvoted
-  match '/' => 'forums#show', :id => 'arquitetura'
+  
+  root :to => 'forums#show'
 end

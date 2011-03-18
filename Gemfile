@@ -21,13 +21,13 @@ gem 'coderay'
 gem 'mail'
 gem 'mysql2'
 
-group :development do
+group :development, :test do
+  gem 'rspec-rails'
   gem 'highline'
   gem 'ruby-debug'
 end
 
 group :test do
-  gem 'rspec-rails'
   gem 'autotest'
   gem 'rails3-generators'
   gem 'sqlite3-ruby', :require => "sqlite3"
