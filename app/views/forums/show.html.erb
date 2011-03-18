@@ -5,21 +5,21 @@
 <% content_for :page_title do -%><%= "Tectura - Desenvolvedores discutindo arquitetura na prática" %><% end -%>
 
 <div class="crumbs">
-    <%= link_to I18n.t('txt.forums'), root_path %><span class="arrow">»</span>
-    <%= link_to "ASSINE " + image_tag('feed-icon.png', :size => '14x14'), forum_posts_path(@forum, :format => :atom), :id => "feed_icon" %>
+    <%= link_to t('txt.forums'), root_path %><span class="arrow">»</span>
+    <%= link_to "ASSINE ".html_safe + image_tag('feed-icon.png', :size => '14x14'), forum_posts_path(@forum, :format => :atom), :id => "feed_icon" %>
 </div>
 
 <p class="subtitle">
     <% if @forum.contain_posts? -%>
-        <%= I18n.t 'txt.count_topics', :count => @forum.topics.size, :num => number_with_delimiter(@forum.topics.size) %>,
-        <%= I18n.t 'txt.count_posts', :count => @forum.posts.size, :num => number_with_delimiter(@forum.posts.size) %>
+        <%= t 'txt.count_topics_html', :count => @forum.topics.size, :num => number_with_delimiter(@forum.topics.size) %>,
+        <%= t 'txt.count_posts_html', :count => @forum.posts.size, :num => number_with_delimiter(@forum.posts.size) %>
     <% else -%>
-        <%= I18n.t 'txt.count_topics', :count => @forum.topics.size, :num => number_with_delimiter(@forum.topics.size) %>
+        <%= t 'txt.count_topics_html', :count => @forum.topics.size, :num => number_with_delimiter(@forum.topics.size) %>
     <% end -%>
 </p>
 
 <% if can_comment? -%>
-  <%= link_to I18n.t('txt.new_topic'), new_forum_topic_path(@forum), :class => "btn ntread" %>
+  <%= link_to t('txt.new_topic'), new_forum_topic_path(@forum), :class => "btn ntread" %>
 <% end -%>
 
 <%= show_all_link %>
@@ -54,5 +54,5 @@
 <%= will_paginate @topics %>
 
 <% if can_comment? %>
-    <%= link_to I18n.t('txt.new_topic', :default => 'New topic'), new_forum_topic_path(@forum), :class => "btn ntread" %>
+    <%= link_to t('txt.new_topic', :default => 'New topic'), new_forum_topic_path(@forum), :class => "btn ntread" %>
 <% end%>

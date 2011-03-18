@@ -9,7 +9,7 @@
                 <%= topic_title_link (topic), :class => "entry-title", :rel => "bookmark" %>
                 <%= "</strong>" if topic.sticky? %>
                 <% if topic.paged? -%>
-                    <small><%= link_to I18n.t('txt.goto_last_page', :default => 'last'), forum_topic_path(@forum, topic, :page => topic.last_page) %></small>
+                    <small><%= link_to t('txt.goto_last_page', :default => 'last'), forum_topic_path(@forum, topic, :page => topic.last_page) %></small>
                 <% end -%><br/>
                 <%= display_linked_tags(topic) %>
             </td>
@@ -20,10 +20,10 @@
             <td class="ca inv stat"><%= number_with_delimiter(topic.hits) %></td>
             <td class="lp">
                 <abbr class="updated" title="<%= topic.last_updated_at.xmlschema %>">
-                    <%= I18n.t 'txt.post_age', :when => time_ago_formatted(topic.last_updated_at), :default => "posted %{when} ago" %>
+                    <%= t 'txt.post_age', :when => time_ago_formatted(topic.last_updated_at), :default => "posted %{when} ago" %>
                 </abbr>
                 <% if topic.last_user -%>
-                    <%= I18n.t 'txt.by_user', :default => 'by %{user}', :user => link_to( topic.last_user.display_name, user_path(topic.last_user)) %>
+                    <%= t 'txt.by_user_html', :default => 'by %{user}', :user => link_to( topic.last_user.display_name, user_path(topic.last_user)) %>
                 <% end -%>
             </td>
         </tr>

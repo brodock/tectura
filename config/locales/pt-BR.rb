@@ -146,12 +146,12 @@
       :footer_message => "Copyright © 2010 <a href=\"http://www.caelum.com.br\">Caelum</a>",
       :created_by     => "código criado por",
       :moderator      => "Moderador",
-      :count_topics   => {:one => "<span class=\"bignum\">1</span> discussão", :other => "<span class=\"bignum\">%{count}</span> discussões"},
-      :count_posts    => {:one => "<span class=\"bignum\">1</span> mensagem", :other => "<span class=\"bignum\">%{count}</span> mensagens"},
+      :count_topics_html   => {:one => "<span class=\"bignum\">1</span> discussão", :other => "<span class=\"bignum\">%{count}</span> discussões"},
+      :count_posts_html    => {:one => "<span class=\"bignum\">1</span> mensagem", :other => "<span class=\"bignum\">%{count}</span> mensagens"},
       :my_topics      => "Minhas discussões",
       :new_topic      => "Nova discussão",
       :post_age       => "%{when} atrás",
-      :by_user        => "por %{user}",
+      :by_user_html   => "por %{user}",
       :view           => "ler",
       :views_forums   => {
         :unmoderated  => "Este fórum não é moderado."

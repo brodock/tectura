@@ -54,7 +54,7 @@ module ApplicationHelper
   end
 
   def display_linked_tags(topic)
-    topic.tag_list.map{|t| link_to("##{t}", tag_path(t),:class => "tag-link")}.join(" ")
+    topic.tag_list.map{|t| link_to("##{t}", tag_path(t),:class => "tag-link")}.join(" ").html_safe
   end
 
   def display_tags_as_keywords(topic)
